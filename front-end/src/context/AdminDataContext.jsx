@@ -155,18 +155,21 @@ export const AdminDataProvider = ({ children }) => {
   });
 
   // Aspirants registered
-  const [aspirants, setAspirants] = useState(() => {
-    const saved = localStorage.getItem('mindpulse_admin_aspirants');
-    return saved
-      ? JSON.parse(saved)
-      : [
-          { id: 'usr-1', name: 'Rahul Sharma', email: 'rahul.s@gmail.com', targetExam: 'UPSC CSE', joined: '2026-10-12', status: 'Active' },
-          { id: 'usr-2', name: 'Priya Verma', email: 'priya.v@outlook.com', targetExam: 'SSC CGL', joined: '2026-10-18', status: 'Active' },
-          { id: 'usr-3', name: 'Aman Patel', email: 'aman.p@gmail.com', targetExam: 'IBPS PO', joined: '2026-10-22', status: 'Active' },
-          { id: 'usr-4', name: 'Neha Gupta', email: 'neha.g@gmail.com', targetExam: 'RRB NTPC', joined: '2026-10-25', status: 'Active' },
-          { id: 'usr-5', name: 'Vikas Kumar', email: 'vikas.k@gmail.com', targetExam: 'NDA', joined: '2026-10-29', status: 'Inactive' },
-        ];
-  });
+  const [aspirants, setAspirants] = useState([]);
+
+  // Auto-fetch real registered students from MongoDB Atlas
+  useEffect(() => {
+    let isMounted = true;
+    import('../services/api').then(({ default: api }) => {
+      api.getAdminAspirants().then((data) => {
+        if (isMounted && data && Array.isArray(data)) {
+          setAspirants(data);
+          localStorage.setItem('mindpulse_admin_aspirants', JSON.stringify(data));
+        }
+      });
+    });
+    return () => { isMounted = false; };
+  }, []);
 
   // Auto-sync to localStorage
   useEffect(() => {

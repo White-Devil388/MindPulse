@@ -59,15 +59,15 @@ export default function AdminDashboard() {
   const stats = [
     {
       label: 'Website Visitors (Today)',
-      value: (liveAdminStats?.todayVisits || 1).toLocaleString(),
-      change: `${(liveAdminStats?.totalVisits || 1).toLocaleString()} Total Hits`,
+      value: (liveAdminStats?.todayVisits || 0).toLocaleString(),
+      change: `${(liveAdminStats?.totalVisits || 0).toLocaleString()} Total Hits`,
       icon: Eye,
       color: 'from-pink-500 to-rose-600',
       tab: 'dashboard',
     },
     {
       label: 'Student Leads & Users',
-      value: (liveAdminStats?.totalUsers || aspirants.length).toLocaleString(),
+      value: (liveAdminStats?.totalUsers !== undefined ? liveAdminStats.totalUsers : aspirants.length).toLocaleString(),
       change: 'With Verified Phone/Email',
       icon: Users,
       color: 'from-blue-500 to-indigo-600',
@@ -75,7 +75,7 @@ export default function AdminDashboard() {
     },
     {
       label: 'Questions in Bank',
-      value: (liveAdminStats?.totalQuestions || questions.length).toLocaleString(),
+      value: (liveAdminStats?.totalQuestions !== undefined ? liveAdminStats.totalQuestions : questions.length).toLocaleString(),
       change: '10 Categories Active',
       icon: BookCheck,
       color: 'from-emerald-500 to-teal-600',
@@ -83,7 +83,7 @@ export default function AdminDashboard() {
     },
     {
       label: 'Mock Tests Active',
-      value: (liveAdminStats?.totalTests || mockTests.length).toString(),
+      value: (liveAdminStats?.totalTests !== undefined ? liveAdminStats.totalTests : mockTests.length).toString(),
       change: 'All-India Test Series',
       icon: FileQuestion,
       color: 'from-cyan-500 to-blue-600',

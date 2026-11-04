@@ -14,16 +14,16 @@ export default function AspirantManager() {
     let isMounted = true;
     api.getAdminAspirants().then((data) => {
       if (isMounted) {
-        if (data && Array.isArray(data) && data.length > 0) {
+        if (data && Array.isArray(data)) {
           setLiveLeads(data);
         } else {
-          setLiveLeads(aspirants);
+          setLiveLeads([]);
         }
         setLoading(false);
       }
     });
     return () => { isMounted = false; };
-  }, [aspirants]);
+  }, []);
 
   const filtered = liveLeads.filter((u) => {
     const q = search.toLowerCase();
