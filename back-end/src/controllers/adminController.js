@@ -72,9 +72,9 @@ export const getAdminStats = async (req, res) => {
         totalTests: totalTests || 7,
         totalExams: totalExams || 88,
         totalAttempts: totalAttempts || 0,
-        totalVisits: Math.max(totalVisits, 1),
-        todayVisits: Math.max(todayVisits, 1),
-        activeAspirantsToday: Math.max(1, totalUsers),
+        totalVisits: totalVisits || 0,
+        todayVisits: todayVisits || 0,
+        activeAspirantsToday: totalUsers || 0,
         recentAspirants: recentAspirants || [],
       },
     });

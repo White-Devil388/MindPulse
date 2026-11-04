@@ -50,10 +50,10 @@ export default function Dashboard() {
             <div>
               <div className="flex items-center gap-2 text-xs font-semibold text-cyan-200 mb-1">
                 <Flame className="w-4 h-4 text-orange-400 fill-current" />
-                <span>5-Day Practice Streak</span>
+                <span>{stats.streakDays > 0 ? `${stats.streakDays}-Day Practice Streak` : 'Start Your Daily Streak'}</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-                Welcome back, {user.email.split('@')[0]}!
+                Welcome back, {user.name || user.email.split('@')[0]}!
               </h1>
               <p className="text-xs sm:text-sm text-blue-100 mt-1">
                 Your target exams: UPSC CSE, SSC CGL 2026. Keep practicing daily to maintain accuracy!
