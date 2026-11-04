@@ -16,41 +16,26 @@ import Footer from '../components/common/Footer';
 import api from '../services/api';
 
 export default function Dashboard() {
-  const user = JSON.parse(localStorage.getItem('examprep_user') || '{"email":"aspirant@examprep.in"}');
+  const user = JSON.parse(localStorage.getItem('examprep_user') || '{"email":"aspirant@mindpulse.in","name":"Aspirant"}');
   const [stats, setStats] = useState({
-    accuracy: 74.5,
-    mcqsSolved: 840,
-    timePracticedHours: 18.4,
-    percentile: 91.2,
-    streakDays: 5,
-    weakTopics: [
-      { topic: 'Indian Polity: Fundamental Rights', accuracy: 42 },
-      { topic: 'Quantitative: Time & Distance', accuracy: 48 },
-      { topic: 'General Science: Thermodynamics', accuracy: 51 },
-    ],
-    recentAttempts: [
-      {
-        testTitle: 'SSC CGL Tier 1 Mock Test 4',
-        timeAgo: 'Completed yesterday',
-        questionsCount: 100,
-        score: '142.5 / 200',
-        percentile: '92.4 Percentile',
-      },
-      {
-        testTitle: 'UPSC CSE Prelims GS 1 Mock 2',
-        timeAgo: 'Completed 3 days ago',
-        questionsCount: 100,
-        score: '108.0 / 200',
-        percentile: '88.1 Percentile',
-      },
-    ],
+    accuracy: 0,
+    mcqsSolved: 0,
+    timePracticedHours: 0,
+    percentile: 0,
+    streakDays: 0,
+    weakTopics: [],
+    recentAttempts: [],
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
     api.getUserStats().then((data) => {
-      if (isMounted && data) {
-        setStats((prev) => ({ ...prev, ...data }));
+      if (isMounted) {
+        if (data) {
+          setStats(data);
+        }
+        setLoading(false);
       }
     });
     return () => { isMounted = false; };
@@ -93,7 +78,7 @@ export default function Dashboard() {
               <Target className="w-6 h-6" />
             </div>
             <div>
-              <div className="text-2xl font-bold text-[#1E2A5A]">74.5%</div>
+              <div className="text-2xl font-bold text-[#1E2A5A]">{stats.accuracy}%</div>
               <div className="text-xs text-slate-400">Avg. Accuracy</div>
             </div>
           </div>
@@ -103,7 +88,7 @@ export default function Dashboard() {
               <CheckCircle className="w-6 h-6" />
             </div>
             <div>
-              <div className="text-2xl font-bold text-[#1E2A5A]">840</div>
+              <div className="text-2xl font-bold text-[#1E2A5A]">{stats.mcqsSolved}</div>
               <div className="text-xs text-slate-400">MCQs Solved</div>
             </div>
           </div>
@@ -113,7 +98,7 @@ export default function Dashboard() {
               <Clock className="w-6 h-6" />
             </div>
             <div>
-              <div className="text-2xl font-bold text-[#1E2A5A]">18.4 hrs</div>
+              <div className="text-2xl font-bold text-[#1E2A5A]">{stats.timePracticedHours} hrs</div>
               <div className="text-xs text-slate-400">Time Practiced</div>
             </div>
           </div>
@@ -123,7 +108,7 @@ export default function Dashboard() {
               <TrendingUp className="w-6 h-6" />
             </div>
             <div>
-              <div className="text-2xl font-bold text-[#1E2A5A]">91.2%</div>
+              <div className="text-2xl font-bold text-[#1E2A5A]">{stats.percentile}%</div>
               <div className="text-xs text-slate-400">Overall Percentile</div>
             </div>
           </div>
@@ -138,67 +123,63 @@ export default function Dashboard() {
                 <AlertCircle className="w-4 h-4 text-amber-500" />
                 <span>Weak Topics Detected</span>
               </h3>
-              <span className="text-[10px] text-blue-600 font-semibold cursor-pointer">View All</span>
             </div>
-            <div className="space-y-3 text-xs">
-              <div className="p-3 bg-slate-50 rounded-xl flex items-center justify-between">
-                <div>
-                  <div className="font-semibold text-slate-700">Indian Polity: Fundamental Rights</div>
-                  <div className="text-[11px] text-red-500 font-medium">42% Accuracy</div>
-                </div>
-                <button className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg font-semibold text-blue-600 hover:bg-blue-50">
-                  Practice
-                </button>
+            {stats.weakTopics && stats.weakTopics.length > 0 ? (
+              <div className="space-y-3 text-xs">
+                {stats.weakTopics.map((item, idx) => (
+                  <div key={idx} className="p-3 bg-slate-50 rounded-xl flex items-center justify-between">
+                    <div>
+                      <div className="font-semibold text-slate-700">{item.topic}</div>
+                      <div className="text-[11px] text-red-500 font-medium">{item.accuracy}% Accuracy</div>
+                    </div>
+                    <Link to="/exams" className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg font-semibold text-blue-600 hover:bg-blue-50">
+                      Practice
+                    </Link>
+                  </div>
+                ))}
               </div>
-
-              <div className="p-3 bg-slate-50 rounded-xl flex items-center justify-between">
-                <div>
-                  <div className="font-semibold text-slate-700">Quantitative: Time & Distance</div>
-                  <div className="text-[11px] text-red-500 font-medium">48% Accuracy</div>
-                </div>
-                <button className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg font-semibold text-blue-600 hover:bg-blue-50">
-                  Practice
-                </button>
+            ) : (
+              <div className="p-6 text-center text-slate-400 text-xs">
+                No weak topics detected yet. Start attempting mock tests to see live topic analysis!
               </div>
-
-              <div className="p-3 bg-slate-50 rounded-xl flex items-center justify-between">
-                <div>
-                  <div className="font-semibold text-slate-700">General Science: Thermodynamics</div>
-                  <div className="text-[11px] text-red-500 font-medium">51% Accuracy</div>
-                </div>
-                <button className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg font-semibold text-blue-600 hover:bg-blue-50">
-                  Practice
-                </button>
-              </div>
-            </div>
+            )}
           </div>
 
           {/* Recent Mock Tests */}
           <div className="lg:col-span-2 bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
-            <h3 className="font-bold text-[#1E2A5A] text-sm">Recent Test Attempts</h3>
-            <div className="divide-y divide-slate-100 text-xs">
-              <div className="py-3 flex items-center justify-between">
-                <div>
-                  <div className="font-bold text-slate-800">SSC CGL Tier 1 Mock Test 4</div>
-                  <div className="text-slate-400 text-[11px]">Completed yesterday • 100 Questions</div>
-                </div>
-                <div className="text-right">
-                  <span className="font-bold text-emerald-600 text-sm">142.5 / 200</span>
-                  <div className="text-[10px] text-slate-400">92.4 Percentile</div>
-                </div>
-              </div>
-
-              <div className="py-3 flex items-center justify-between">
-                <div>
-                  <div className="font-bold text-slate-800">UPSC CSE Prelims GS 1 Mock 2</div>
-                  <div className="text-slate-400 text-[11px]">Completed 3 days ago • 100 Questions</div>
-                </div>
-                <div className="text-right">
-                  <span className="font-bold text-blue-600 text-sm">108.0 / 200</span>
-                  <div className="text-[10px] text-slate-400">88.1 Percentile</div>
-                </div>
-              </div>
+            <div className="flex items-center justify-between">
+              <h3 className="font-bold text-[#1E2A5A] text-sm">Recent Test Attempts</h3>
+              <Link to="/mock-tests" className="text-xs text-blue-600 font-semibold hover:underline">
+                Attempt Mock Tests
+              </Link>
             </div>
+
+            {stats.recentAttempts && stats.recentAttempts.length > 0 ? (
+              <div className="divide-y divide-slate-100 text-xs">
+                {stats.recentAttempts.map((attempt, idx) => (
+                  <div key={idx} className="py-3 flex items-center justify-between">
+                    <div>
+                      <div className="font-bold text-slate-800">{attempt.testTitle}</div>
+                      <div className="text-slate-400 text-[11px]">{attempt.timeAgo} • {attempt.questionsCount} Questions</div>
+                    </div>
+                    <div className="text-right">
+                      <span className="font-bold text-emerald-600 text-sm">{attempt.score}</span>
+                      <div className="text-[10px] text-slate-400">{attempt.percentile}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-8 text-center text-slate-400 text-xs space-y-3">
+                <p>You haven't attempted any mock tests yet.</p>
+                <Link
+                  to="/exams"
+                  className="inline-block px-4 py-2 rounded-xl bg-blue-600 text-white font-semibold text-xs hover:bg-blue-700 transition-all shadow-md shadow-blue-600/20"
+                >
+                  Start Your First Test Now
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </main>
