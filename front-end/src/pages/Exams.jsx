@@ -7,7 +7,10 @@ import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { EXAM_CATEGORIES, toSlug } from '../utils/examData';
 import { useDebounce } from '../hooks/useDebounce';
+import { useInfiniteScroll } from '../hooks/useInfiniteScroll';
 import api from '../services/api';
+
+const INITIAL_VISIBLE_COUNT = 3;
 
 export default function Exams() {
   const { i18n } = useTranslation();
@@ -19,6 +22,7 @@ export default function Exams() {
   const debouncedSearch = useDebounce(searchTerm, 250);
   const [selectedCat, setSelectedCat] = useState('all');
   const [categoriesList, setCategoriesList] = useState(EXAM_CATEGORIES);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT);
   const currentLang = i18n.language === 'hi' ? 'hi' : 'en';
 
   // Fetch categories from backend MongoDB Atlas with cancel cleanup
@@ -54,6 +58,22 @@ export default function Exams() {
       })
       .filter(Boolean);
   }, [categoriesList, selectedCat, debouncedSearch]);
+
+  // Reset visible infinite scroll count on search or category filter change
+  useEffect(() => {
+    setVisibleCount(INITIAL_VISIBLE_COUNT);
+  }, [debouncedSearch, selectedCat]);
+
+  const handleLoadMore = useCallback(() => {
+    setVisibleCount((prev) => prev + 2);
+  }, []);
+
+  const hasMore = visibleCount < filteredCategories.length;
+  const { sentinelRef } = useInfiniteScroll(handleLoadMore, hasMore, false);
+
+  const displayedCategories = useMemo(() => {
+    return filteredCategories.slice(0, visibleCount);
+  }, [filteredCategories, visibleCount]);
 
   const handleExamClick = useCallback(
     (categoryId, examName) => {
@@ -123,68 +143,78 @@ export default function Exams() {
             <p className="text-sm text-slate-400 mt-1">Try adjusting your search query or clear filters.</p>
           </div>
         ) : (
-          filteredCategories.map((cat) => (
-            <div key={cat.id} className="space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-200 pb-3">
-                <div className="flex items-center gap-3">
-                  <div
-                    className="w-3 h-8 rounded-full"
-                    style={{ backgroundColor: cat.color }}
-                  />
-                  <h2 className="text-xl sm:text-2xl font-bold text-[#1E2A5A]">
-                    {cat.name[currentLang] || cat.name.en}
-                  </h2>
-                </div>
-                <span className="text-xs font-semibold text-slate-500 bg-white px-3 py-1 rounded-full border border-slate-200">
-                  {cat.filteredExams.length} Available
-                </span>
-              </div>
-
-              {/* Exam Cards Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                {cat.filteredExams.map((examName) => (
-                  <Tilt
-                    key={examName}
-                    tiltMaxAngleX={8}
-                    tiltMaxAngleY={8}
-                    perspective={1000}
-                    scale={1.02}
-                    className="h-full"
-                  >
+          <>
+            {displayedCategories.map((cat) => (
+              <div key={cat.id} className="space-y-4">
+                <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+                  <div className="flex items-center gap-3">
                     <div
-                      onClick={() => handleExamClick(cat.id, examName)}
-                      className="cursor-pointer bg-white rounded-2xl p-5 border border-slate-200/80 hover:border-blue-300 shadow-sm hover:shadow-lg transition-all flex flex-col justify-between h-full group"
-                    >
-                      <div>
-                        <div className="flex items-center justify-between mb-3">
-                          <span
-                            className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md text-white"
-                            style={{ backgroundColor: cat.color }}
-                          >
-                            Govt Exam
-                          </span>
-                          <span className="text-[10px] text-emerald-600 font-semibold bg-emerald-50 px-2 py-0.5 rounded">
-                            Free
-                          </span>
-                        </div>
-                        <h3 className="font-bold text-[#1E2A5A] text-base group-hover:text-blue-600 transition-colors">
-                          {examName}
-                        </h3>
-                        <p className="text-xs text-slate-400 mt-1">
-                          Full Mock Tests • PYQ Papers • Topic Practice
-                        </p>
-                      </div>
+                      className="w-3 h-8 rounded-full"
+                      style={{ backgroundColor: cat.color }}
+                    />
+                    <h2 className="text-xl sm:text-2xl font-bold text-[#1E2A5A]">
+                      {cat.name[currentLang] || cat.name.en}
+                    </h2>
+                  </div>
+                  <span className="text-xs font-semibold text-slate-500 bg-white px-3 py-1 rounded-full border border-slate-200">
+                    {cat.filteredExams.length} Available
+                  </span>
+                </div>
 
-                      <div className="mt-6 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-blue-600">
-                        <span>Start Practice</span>
-                        <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                {/* Exam Cards Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                  {cat.filteredExams.map((examName) => (
+                    <Tilt
+                      key={examName}
+                      tiltMaxAngleX={8}
+                      tiltMaxAngleY={8}
+                      perspective={1000}
+                      scale={1.02}
+                      className="h-full"
+                    >
+                      <div
+                        onClick={() => handleExamClick(cat.id, examName)}
+                        className="cursor-pointer bg-white rounded-2xl p-5 border border-slate-200/80 hover:border-blue-300 shadow-sm hover:shadow-lg transition-all flex flex-col justify-between h-full group"
+                      >
+                        <div>
+                          <div className="flex items-center justify-between mb-3">
+                            <span
+                              className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md text-white"
+                              style={{ backgroundColor: cat.color }}
+                            >
+                              Govt Exam
+                            </span>
+                            <span className="text-[10px] text-emerald-600 font-semibold bg-emerald-50 px-2 py-0.5 rounded">
+                              Free
+                            </span>
+                          </div>
+                          <h3 className="font-bold text-[#1E2A5A] text-base group-hover:text-blue-600 transition-colors">
+                            {examName}
+                          </h3>
+                          <p className="text-xs text-slate-400 mt-1">
+                            Full Mock Tests • PYQ Papers • Topic Practice
+                          </p>
+                        </div>
+
+                        <div className="mt-6 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-blue-600">
+                          <span>Start Practice</span>
+                          <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </div>
                       </div>
-                    </div>
-                  </Tilt>
-                ))}
+                    </Tilt>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))
+            ))}
+
+            {/* Sentinel for Infinite Scroll */}
+            {hasMore && (
+              <div ref={sentinelRef} className="py-6 text-center text-slate-400 text-xs flex items-center justify-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+                <span>Loading more categories automatically...</span>
+              </div>
+            )}
+          </>
         )}
       </main>
 
