@@ -24,7 +24,8 @@ export default function Login() {
 
       if (res && res.success) {
         localStorage.setItem('examprep_user', JSON.stringify(res.data));
-        navigate('/dashboard');
+        const destination = location.state?.from?.pathname || '/dashboard';
+        navigate(destination, { replace: true });
       } else {
         setError(res?.message || 'Invalid email or password. Please check your credentials or Sign Up.');
       }
@@ -57,7 +58,8 @@ export default function Login() {
         // If backend sync succeeds or falls back, always create authenticated session
         const sessionUser = (syncRes && syncRes.data) ? syncRes.data : userPayload;
         localStorage.setItem('examprep_user', JSON.stringify(sessionUser));
-        navigate('/dashboard');
+        const destination = location.state?.from?.pathname || '/dashboard';
+        navigate(destination, { replace: true });
       } catch (err) {
         console.error('Google profile error:', err);
         setError('Failed to fetch Google profile. Please try again.');

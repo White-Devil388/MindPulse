@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import LoadingFallback from '../components/common/LoadingFallback';
 import ProtectedAdminRoute from '../components/admin/ProtectedAdminRoute';
+import ProtectedUserRoute from '../components/common/ProtectedUserRoute';
 
 // Lazy-loaded pages for optimized bundle splitting & faster first contentful paint
 const Home = lazy(() => import('../pages/Home'));
@@ -29,7 +30,14 @@ export default function AppRoutes() {
         <Route path="/mock-tests" element={<Exams />} />
         <Route path="/mock-test/:testId" element={<MockTestAttempt />} />
         <Route path="/pyq" element={<Exams />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedUserRoute>
+              <Dashboard />
+            </ProtectedUserRoute>
+          }
+        />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
