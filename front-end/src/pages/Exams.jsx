@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Tilt from 'react-parallax-tilt';
 import { Search, ChevronRight, BookOpen, Layers, Award } from 'lucide-react';
@@ -13,6 +13,7 @@ import api from '../services/api';
 const INITIAL_VISIBLE_COUNT = 3;
 
 export default function Exams() {
+  const { categoryId } = useParams();
   const { i18n } = useTranslation();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -20,7 +21,14 @@ export default function Exams() {
   
   const [searchTerm, setSearchTerm] = useState(initialSearch);
   const debouncedSearch = useDebounce(searchTerm, 250);
-  const [selectedCat, setSelectedCat] = useState('all');
+  const [selectedCat, setSelectedCat] = useState(categoryId || 'all');
+
+  // Sync category filter if URL param :categoryId changes
+  useEffect(() => {
+    if (categoryId) {
+      setSelectedCat(categoryId);
+    }
+  }, [categoryId]);
   const [categoriesList, setCategoriesList] = useState(EXAM_CATEGORIES);
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT);
   const currentLang = i18n.language === 'hi' ? 'hi' : 'en';
