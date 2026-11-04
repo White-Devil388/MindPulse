@@ -87,13 +87,51 @@ export default function MockTestAttempt() {
   const [submitted, setSubmitted] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
 
-  // Auto-submit callback using useCallback
-  const handleAutoSubmit = useCallback(() => {
-    if (!submitted) {
-      setSubmitted(true);
-      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+  // Prevent accidental navigation, browser back button, reload or tab close while test is in progress
+  useEffect(() => {
+    if (submitted) return;
+
+    // 1. Trap browser back / forward navigation
+    window.history.pushState(null, '', window.location.href);
+
+    const handlePopState = (e) => {
+      // Force user to stay on test attempt page
+      window.history.pushState(null, '', window.location.href);
+      if (
+        window.confirm(
+          '⚠️ Exam in Progress! You cannot use the browser back button.\n\nDo you want to CANCEL this exam and exit? Your progress will be lost.'
+        )
+      ) {
+        navigate('/exams', { replace: true });
+      }
+    };
+
+    // 2. Trap page refresh / tab close
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = 'An exam is currently in progress. If you leave, your attempt will be cancelled.';
+      return e.returnValue;
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [submitted, navigate]);
+
+  const handleCancelExam = useCallback(() => {
+    if (
+      window.confirm(
+        '⚠️ Are you sure you want to CANCEL this examination?\n\nAll your answered questions will be discarded, and you will return to the exams catalog.'
+      )
+    ) {
+      pauseTimer();
+      navigate('/exams', { replace: true });
     }
-  }, [submitted]);
+  }, [navigate, pauseTimer]);
 
   // Accurate countdown timer custom hook (avoids tab drift)
   const { formattedTime, resetTimer, pauseTimer, timeLeft } = useTimer(3600, handleAutoSubmit);
@@ -207,16 +245,24 @@ export default function MockTestAttempt() {
           </button>
 
           {!submitted ? (
-            <button
-              onClick={() => {
-                if (confirm('Are you sure you want to submit Test ' + activeBatch + '?')) {
-                  handleSubmit();
-                }
-              }}
-              className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs shadow-md shadow-emerald-600/20 transition-all cursor-pointer"
-            >
-              Submit Test
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleCancelExam}
+                className="px-3.5 sm:px-4 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-xs active:scale-95 transition-all cursor-pointer"
+              >
+                Cancel Exam
+              </button>
+              <button
+                onClick={() => {
+                  if (confirm('Are you sure you want to submit Test ' + activeBatch + '?')) {
+                    handleSubmit();
+                  }
+                }}
+                className="px-4 sm:px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs shadow-md shadow-emerald-600/20 transition-all cursor-pointer"
+              >
+                Submit Test
+              </button>
+            </div>
           ) : (
             <button
               onClick={() => navigate('/exams')}
