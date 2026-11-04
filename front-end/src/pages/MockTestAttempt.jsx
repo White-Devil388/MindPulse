@@ -87,6 +87,17 @@ export default function MockTestAttempt() {
   const [submitted, setSubmitted] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
 
+  // Auto-submit callback using useCallback
+  const handleAutoSubmit = useCallback(() => {
+    if (!submitted) {
+      setSubmitted(true);
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+    }
+  }, [submitted]);
+
+  // Accurate countdown timer custom hook (avoids tab drift)
+  const { formattedTime, resetTimer, pauseTimer, timeLeft } = useTimer(3600, handleAutoSubmit);
+
   // Prevent accidental navigation, browser back button, reload or tab close while test is in progress
   useEffect(() => {
     if (submitted) return;
@@ -132,9 +143,6 @@ export default function MockTestAttempt() {
       navigate('/exams', { replace: true });
     }
   }, [navigate, pauseTimer]);
-
-  // Accurate countdown timer custom hook (avoids tab drift)
-  const { formattedTime, resetTimer, pauseTimer, timeLeft } = useTimer(3600, handleAutoSubmit);
 
   // Reset attempt state if user switches batch
   useEffect(() => {
