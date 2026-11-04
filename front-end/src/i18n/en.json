@@ -1,0 +1,63 @@
+{
+  "nav": {
+    "home": "Home",
+    "exams": "Exams",
+    "mockTests": "Mock Tests",
+    "pyq": "Previous Year Papers",
+    "support": "Support",
+    "signIn": "Sign In",
+    "dashboard": "Dashboard"
+  },
+  "hero": {
+    "tagline": "Your 100% Free Preparation Partner",
+    "title": "Free Practice for Every Government Exam",
+    "subtitle": "Master UPSC, SSC, Banking, Railways, Defence, State PSCs and more with real-time timed mock tests, previous year papers, and AI-driven weak topic analytics.",
+    "inputPlaceholder": "Enter your email or target exam...",
+    "cta": "Start Free Practice",
+    "watchVideo": "Watch Platform Tour",
+    "trustedBy": "Students preparing for India's top competitive exams"
+  },
+  "categories": {
+    "badge": "The Best Free Exam Practice Platform",
+    "heading": "Prepare for Every Exam Easily",
+    "subheading": "Comprehensive coverage of all central and state government entrance examinations with unlimited practice questions.",
+    "exploreAll": "Explore All 10 Categories"
+  },
+  "features": {
+    "badge": "Why MindPulse Stands Out",
+    "heading": "Built for Serious Aspirants",
+    "subheading": "A distraction-free, intelligent testing ecosystem tailored to match exact real exam interfaces.",
+    "f1_title": "100% Free Practice",
+    "f1_desc": "Unlimited mock tests and topic-wise MCQs. No paywalls, subscription fees, or hidden trials.",
+    "f2_title": "Bilingual (Hindi + English)",
+    "f2_desc": "Toggle seamlessly between Hindi and English with full Devanagari font rendering support.",
+    "f3_title": "Previous Year Papers",
+    "f3_desc": "Authentic PYQs with detailed explanations, sectional filters, and past cutoff benchmarks.",
+    "f4_title": "Smart Mock Test Engine",
+    "f4_desc": "TCS-iON inspired interface with real timers, question palettes, and negative marking rules.",
+    "f5_title": "Deep Performance Analytics",
+    "f5_desc": "Detailed speed vs accuracy reports, weak chapter identification, and percentile tracking.",
+    "f6_title": "PDF to Mock Test",
+    "f6_desc": "Upload your coaching or question PDF files and convert them into interactive tests instantly."
+  },
+  "stats": {
+    "title": "Numbers Speak Aloud",
+    "subtitle": "Empowering thousands of government aspirants every day with free quality preparation.",
+    "questions": "Questions Solved",
+    "mockTests": "Mock Tests Completed",
+    "aspirants": "Active Aspirants",
+    "exams": "Exams Covered"
+  },
+  "ctaSection": {
+    "title": "Ready to Ace Your Next Government Exam?",
+    "subtitle": "Join thousands of students practicing daily. Zero credit cards required.",
+    "btn": "Get Started Now for Free"
+  },
+  "footer": {
+    "desc": "MindPulse is an open, free community initiative providing high-standard mock exams and practice tools for Indian competitive aspirants.",
+    "quickLinks": "Quick Links",
+    "categories": "Categories",
+    "rights": "All rights reserved. 100% Free Practice Platform."
+  }
+}
+

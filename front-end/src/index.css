@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --grad-start: #22d3ee;
+  --grad-mid: #3b82f6;
+  --grad-end: #6d28d9;
+  --bg-soft: #eaf6ff;
+  --card-white: #ffffff;
+  --text-dark: #1e2a5a;
+  --text-muted: #7a86b6;
+  --cta-orange: #ff6b3d;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text-dark);
+  background-color: #ffffff;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 3D Perspective Root */
+.perspective-1000 {
+  perspective: 1000px;
+}
+.perspective-1500 {
+  perspective: 1500px;
+}
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+/* 3D Glass Layer */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Hero Background Gradient matching reference image */
+.bg-hero-gradient {
+  background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 45%, #06b6d4 100%);
+}
+
+.bg-hero-gradient-deep {
+  background: radial-gradient(circle at 80% 20%, rgba(34, 211, 238, 0.3) 0%, transparent 60%),
+              linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #0284c7 100%);
+}
+
+/* Smooth Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

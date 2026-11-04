@@ -1,0 +1,86 @@
+export const EXAM_CATEGORIES = [
+  {
+    id: "civil-services",
+    name: { en: "Civil Services", hi: "सिविल सेवा" },
+    icon: "Landmark",
+    color: "#3B82F6",
+    exams: ["UPSC", "MPPSC", "UPPSC", "BPSC", "RPSC", "JPSC", "CGPSC", "HPSC", "MPSC", "GPSC", "OPSC", "UKPSC"],
+    desc: { en: "IAS, IPS, State PSCs & administrative services", hi: "आईएएस, आईपीएस, राज्य लोक सेवा आयोग" },
+  },
+  {
+    id: "ssc",
+    name: { en: "SSC Exams", hi: "एसएससी परीक्षाएं" },
+    icon: "FileCheck",
+    color: "#06B6D4",
+    exams: ["SSC CGL", "SSC CHSL", "SSC MTS", "SSC GD", "SSC CPO", "SSC JE", "SSC Stenographer"],
+    desc: { en: "Combined Graduate Level, CHSL, MTS & GD Constable", hi: "संयुक्त स्नातक स्तर, सीएचएसएल, एमटीएस" },
+  },
+  {
+    id: "banking",
+    name: { en: "Banking Exams", hi: "बैंकिंग परीक्षाएं" },
+    icon: "Banknote",
+    color: "#10B981",
+    exams: ["IBPS PO", "IBPS Clerk", "IBPS SO", "IBPS RRB", "SBI PO", "SBI Clerk", "RBI Grade B", "RBI Assistant", "NABARD Grade A"],
+    desc: { en: "SBI, IBPS, RBI probationary officers and clerks", hi: "एसबीआई, आईबीपीएस, आरबीआई पीओ और क्लर्क" },
+  },
+  {
+    id: "railway",
+    name: { en: "Railway Exams", hi: "रेलवे परीक्षाएं" },
+    icon: "TrainFront",
+    color: "#F59E0B",
+    exams: ["RRB NTPC", "RRB Group D", "RRB ALP", "RRB JE", "RRB Technician", "RPF Constable", "RPF SI"],
+    desc: { en: "NTPC, Assistant Loco Pilot, Group D & RPF", hi: "एनटीपीसी, एएलपी, ग्रुप डी और आरपीएफ" },
+  },
+  {
+    id: "defence",
+    name: { en: "Defence Exams", hi: "रक्षा परीक्षाएं" },
+    icon: "Shield",
+    color: "#EF4444",
+    exams: ["NDA", "CDS", "AFCAT", "CAPF", "Agniveer Army", "Agniveer Vayu", "Navy SSR/MR", "Coast Guard Navik"],
+    desc: { en: "NDA, CDS, AFCAT, CAPF & Agniveer tri-services", hi: "एनडीए, सीडीएस, एफकैट और अग्निवीर" },
+  },
+  {
+    id: "police",
+    name: { en: "Police Exams", hi: "पुलिस परीक्षाएं" },
+    icon: "Siren",
+    color: "#6366F1",
+    exams: ["MP Police", "UP Police", "Bihar Police", "Rajasthan Police", "Delhi Police", "Maharashtra Police", "Haryana Police", "State Police SI"],
+    desc: { en: "Constable, Sub-Inspector & state police forces", hi: "कांस्टेबल और सब-इंस्पेक्टर" },
+  },
+  {
+    id: "teaching",
+    name: { en: "Teaching Exams", hi: "शिक्षक परीक्षाएं" },
+    icon: "GraduationCap",
+    color: "#8B5CF6",
+    exams: ["CTET", "UGC NET", "CSIR NET", "MPTET", "UPTET", "REET", "HTET", "KVS", "NVS"],
+    desc: { en: "CTET, State TETs, UGC NET, KVS & NVS", hi: "सीटीईटी, राज्य टीईटी, यूजीसी नेट" },
+  },
+  {
+    id: "engineering-medical",
+    name: { en: "Engineering & Medical", hi: "इंजीनियरिंग और मेडिकल" },
+    icon: "Stethoscope",
+    color: "#EC4899",
+    exams: ["JEE Main", "JEE Advanced", "NEET UG", "NEET PG", "GATE", "BITSAT", "VITEEE"],
+    desc: { en: "JEE, NEET UG/PG, GATE & top engineering/medical entrances", hi: "जेईई मेन, नीट, गेट" },
+  },
+  {
+    id: "other-competitive",
+    name: { en: "Other Competitive Exams", hi: "अन्य प्रतियोगी परीक्षाएं" },
+    icon: "Trophy",
+    color: "#14B8A6",
+    exams: ["CUET UG", "CUET PG", "CAT", "XAT", "CLAT", "AILET", "NIFT", "NID DAT", "AIBE", "Judicial Services"],
+    desc: { en: "CUET, CAT, CLAT, Law & management exams", hi: "सीयूईटी, कैट, क्लैट, कानून प्रवेश" },
+  },
+  {
+    id: "other-government",
+    name: { en: "Other Government Exams", hi: "अन्य सरकारी परीक्षाएं" },
+    icon: "Building2",
+    color: "#F97316",
+    exams: ["FCI", "EPFO", "ESIC", "LIC AAO", "LIC ADO", "NICL AO", "IB ACIO", "India Post GDS", "ISRO", "DRDO", "BARC"],
+    desc: { en: "FCI, EPFO, Insurance, Post Office & Research bodies", hi: "एफसीआई, ईपीएफओ, बीमा और डाक विभाग" },
+  },
+];
+
+export const toSlug = (name) =>
+  name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
