@@ -25,6 +25,7 @@ import CategoryManager from '../../components/admin/CategoryManager';
 import AnnouncementManager from '../../components/admin/AnnouncementManager';
 import AspirantManager from '../../components/admin/AspirantManager';
 import JsonQuestionImporter from '../../components/admin/JsonQuestionImporter';
+import SubmissionsManager from '../../components/admin/SubmissionsManager';
 import api from '../../services/api';
 
 export default function AdminDashboard() {
@@ -237,6 +238,7 @@ export default function AdminDashboard() {
           {activeTab === 'categories' && <CategoryManager />}
           {activeTab === 'announcements' && <AnnouncementManager />}
           {activeTab === 'aspirants' && <AspirantManager />}
+          {activeTab === 'submissions' && <SubmissionsManager />}
           {activeTab === 'importer' && <JsonQuestionImporter />}
         </main>
       </div>

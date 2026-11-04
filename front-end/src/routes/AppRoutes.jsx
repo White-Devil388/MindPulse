@@ -11,6 +11,7 @@ const MockTestAttempt = lazy(() => import('../pages/MockTestAttempt'));
 const Login = lazy(() => import('../pages/Login'));
 const Signup = lazy(() => import('../pages/Signup'));
 const Dashboard = lazy(() => import('../pages/Dashboard'));
+const About = lazy(() => import('../pages/About'));
 
 // Lazy-loaded Admin pages
 const AdminLogin = lazy(() => import('../pages/admin/AdminLogin'));
@@ -29,6 +30,7 @@ export default function AppRoutes() {
         <Route path="/mock-test/:testId" element={<MockTestAttempt />} />
         <Route path="/pyq" element={<Exams />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 

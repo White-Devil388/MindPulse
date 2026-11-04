@@ -65,6 +65,7 @@ export default function Footer() {
           </h4>
           <ul className="space-y-2 text-xs text-blue-100">
             <li><Link to="/exams" className="hover:text-cyan-300 transition-colors">All Examinations</Link></li>
+            <li><Link to="/about" className="text-cyan-300 hover:text-white font-semibold transition-colors">About Us & Free Mission</Link></li>
             <li><Link to="/mock-tests" className="hover:text-cyan-300 transition-colors">Timed Mock Tests</Link></li>
             <li><Link to="/pyq" className="hover:text-cyan-300 transition-colors">Previous Year Papers</Link></li>
             <li><Link to="/daily-quiz" className="hover:text-cyan-300 transition-colors">Daily 10-Question Quiz</Link></li>

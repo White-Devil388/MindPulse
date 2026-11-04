@@ -66,6 +66,12 @@ export default function AdminSidebar({
       icon: Users,
       badge: 'Live',
     },
+    {
+      id: 'submissions',
+      label: 'Contributed Questions',
+      icon: FileQuestion,
+      badge: 'New',
+    },
   ];
 
   return (

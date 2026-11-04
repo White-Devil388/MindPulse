@@ -4,6 +4,7 @@ import { MockTest } from '../models/MockTest.js';
 import { User } from '../models/User.js';
 import { TestAttempt } from '../models/TestAttempt.js';
 import { Visitor } from '../models/Visitor.js';
+import QuestionSubmission from '../models/QuestionSubmission.js';
 
 // @desc    Silent tracking of anonymous & regular website visitors
 // @route   POST /api/track-visit
@@ -136,6 +137,95 @@ export const bulkUploadQuestions = async (req, res) => {
       success: true,
       message: `${questions.length} questions successfully imported`,
       count: questions.length,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Submit user/community contributed question
+// @route   POST /api/questions/submit
+export const submitQuestion = async (req, res) => {
+  try {
+    const {
+      contributorName,
+      contributorEmail,
+      contributorPhone,
+      exam,
+      subject,
+      topic,
+      questionText,
+      options,
+      correctAnswer,
+      explanation,
+    } = req.body;
+
+    if (!contributorName || !contributorEmail || !exam || !subject || !questionText || !options || !correctAnswer) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please fill in all required question and contributor fields.',
+      });
+    }
+
+    const submission = await QuestionSubmission.create({
+      contributorName,
+      contributorEmail,
+      contributorPhone,
+      exam,
+      subject,
+      topic: topic || 'General',
+      questionText,
+      options: Array.isArray(options) ? options : [options],
+      correctAnswer,
+      explanation,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Thank you! Your question has been submitted for review.',
+      data: submission,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Get all community submitted questions for Admin
+// @route   GET /api/admin/submissions
+export const getSubmissions = async (req, res) => {
+  try {
+    const submissions = await QuestionSubmission.find({}).sort({ createdAt: -1 }).lean();
+    res.json({
+      success: true,
+      count: submissions.length,
+      data: submissions,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Update submission status (approved, rejected)
+// @route   PATCH /api/admin/submissions/:id/status
+export const updateSubmissionStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const submission = await QuestionSubmission.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    );
+
+    if (!submission) {
+      return res.status(404).json({ success: false, message: 'Submission not found' });
+    }
+
+    res.json({
+      success: true,
+      message: `Submission marked as ${status}`,
+      data: submission,
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

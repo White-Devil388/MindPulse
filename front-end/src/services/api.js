@@ -260,6 +260,48 @@ export const api = {
       return null;
     }
   },
+
+  // --- Community Question Submission ---
+  async submitCommunityQuestion(formData) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/questions/submit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      return await res.json();
+    } catch (err) {
+      console.error('Question submission error:', err);
+      return { success: false, message: err.message || 'Submission failed' };
+    }
+  },
+
+  async getAdminSubmissions() {
+    try {
+      const res = await fetch(`${API_BASE_URL}/admin/submissions`, {
+        headers: getAuthHeaders(),
+      });
+      const data = await res.json();
+      return data.success ? data.data : [];
+    } catch (err) {
+      console.warn('Failed to fetch submissions:', err);
+      return [];
+    }
+  },
+
+  async updateSubmissionStatus(id, status) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/admin/submissions/${id}/status`, {
+        method: 'PATCH',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ status }),
+      });
+      return await res.json();
+    } catch (err) {
+      console.warn('Failed to update submission status:', err);
+      return { success: false, message: err.message };
+    }
+  },
 };
 
 export default api;

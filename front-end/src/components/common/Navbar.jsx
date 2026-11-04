@@ -74,6 +74,12 @@ export default function Navbar() {
           >
             {t('nav.dashboard')}
           </Link>
+          <Link
+            to="/about"
+            className="text-cyan-300 hover:text-white transition-colors drop-shadow-sm py-1 font-bold relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-cyan-300 hover:after:w-full after:transition-all"
+          >
+            About Us
+          </Link>
         </nav>
 
         {/* Action Controls */}
@@ -144,6 +150,13 @@ export default function Navbar() {
             className="block px-3 py-2 rounded-xl hover:bg-white/10 font-semibold text-sm"
           >
             {t('nav.dashboard')}
+          </Link>
+          <Link
+            to="/about"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block px-3 py-2 rounded-xl bg-cyan-500/20 text-cyan-300 font-bold text-sm"
+          >
+            About Us & Contribute
           </Link>
         </div>
       )}
