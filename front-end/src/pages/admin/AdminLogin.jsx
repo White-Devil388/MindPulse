@@ -69,15 +69,6 @@ export default function AdminLogin() {
             </p>
           </div>
 
-          {/* Quick seed info helper */}
-          <div className="mb-6 p-3.5 rounded-2xl bg-cyan-950/40 border border-cyan-500/20 text-xs text-cyan-200/90">
-            <span className="font-bold text-cyan-300 block mb-1">🔑 Seed Credentials:</span>
-            <div className="flex justify-between items-center text-slate-300">
-              <span>Email: <code className="text-cyan-300 bg-white/10 px-1.5 py-0.5 rounded">admin</code></span>
-              <span>Pass: <code className="text-cyan-300 bg-white/10 px-1.5 py-0.5 rounded">admin123</code></span>
-            </div>
-          </div>
-
           {error && (
             <div className="mb-5 p-3 rounded-xl bg-red-950/50 border border-red-500/40 text-red-200 text-xs flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
