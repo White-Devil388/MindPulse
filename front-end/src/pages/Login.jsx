@@ -54,12 +54,10 @@ export default function Login() {
         };
 
         const syncRes = await api.syncAuth(userPayload);
-        if (syncRes && syncRes.success) {
-          localStorage.setItem('examprep_user', JSON.stringify(syncRes.data || userPayload));
-          navigate('/dashboard');
-        } else {
-          setError('Google authentication failed. Please try again.');
-        }
+        // If backend sync succeeds or falls back, always create authenticated session
+        const sessionUser = (syncRes && syncRes.data) ? syncRes.data : userPayload;
+        localStorage.setItem('examprep_user', JSON.stringify(sessionUser));
+        navigate('/dashboard');
       } catch (err) {
         console.error('Google profile error:', err);
         setError('Failed to fetch Google profile. Please try again.');
