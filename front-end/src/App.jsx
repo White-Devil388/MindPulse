@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import AppRoutes from './routes/AppRoutes';
+import ScrollToTop from './components/common/ScrollToTop';
 import { AdminAuthProvider } from './context/AdminAuthContext';
 import { AdminDataProvider } from './context/AdminDataContext';
 import api from './services/api';
@@ -20,6 +21,7 @@ export default function App() {
   return (
     <AdminAuthProvider>
       <AdminDataProvider>
+        <ScrollToTop />
         <div className="w-full min-h-screen">
           <AppRoutes />
         </div>
