@@ -1,13 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Languages, Menu, X, BookOpen, Layers } from 'lucide-react';
+import { Languages, Menu, X, BookOpen, Layers, LogOut, User } from 'lucide-react';
 
 export default function Navbar() {
   const { t, i18n } = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('examprep_user');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.email && parsed.email !== 'aspirant@examprep.in') {
+          setCurrentUser(parsed);
+        }
+      }
+    } catch (e) {}
+  }, [location.pathname]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('examprep_user');
+    localStorage.removeItem('mindpulse_token');
+    setCurrentUser(null);
+    navigate('/');
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -94,13 +115,32 @@ export default function Navbar() {
             <span>{i18n.language === 'en' ? 'हिन्दी' : 'English'}</span>
           </button>
 
-          {/* Sign In Button */}
-          <Link
-            to="/login"
-            className="px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full bg-white text-blue-900 font-bold text-xs sm:text-sm shadow-md shadow-blue-950/20 hover:bg-cyan-50 hover:shadow-cyan-400/20 hover:scale-105 active:scale-95 transition-all whitespace-nowrap"
-          >
-            {t('nav.signIn')}
-          </Link>
+          {/* Sign In Button or User Profile */}
+          {currentUser ? (
+            <div className="flex items-center gap-2">
+              <Link
+                to="/dashboard"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cyan-400/20 border border-cyan-400/30 text-cyan-200 text-xs font-bold hover:bg-cyan-400/30 transition-all"
+              >
+                <User className="w-3.5 h-3.5 text-cyan-300" />
+                <span className="hidden sm:inline">{currentUser.name || currentUser.email.split('@')[0]}</span>
+              </Link>
+              <button
+                onClick={handleLogout}
+                title="Sign Out"
+                className="p-1.5 rounded-full bg-white/10 hover:bg-rose-500/30 text-slate-300 hover:text-rose-300 border border-white/20 transition-all"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              className="px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full bg-white text-blue-900 font-bold text-xs sm:text-sm shadow-md shadow-blue-950/20 hover:bg-cyan-50 hover:shadow-cyan-400/20 hover:scale-105 active:scale-95 transition-all whitespace-nowrap"
+            >
+              {t('nav.signIn')}
+            </Link>
+          )}
 
           {/* Mobile Menu Toggle Button */}
           <button
