@@ -14,13 +14,17 @@ import {
   Filter
 } from 'lucide-react';
 import { api } from '../../services/api';
+import { useAdminData } from '../../context/AdminDataContext';
+import { findCategoryForExam } from '../../utils/questionFilter';
 
 export default function SubmissionsManager() {
+  const { addQuestion } = useAdminData();
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [updatingId, setUpdatingId] = useState(null);
+  const [actionNotice, setActionNotice] = useState(null);
 
   const fetchSubmissions = async () => {
     setLoading(true);
@@ -35,11 +39,55 @@ export default function SubmissionsManager() {
 
   const handleStatusChange = async (id, newStatus) => {
     setUpdatingId(id);
+    setActionNotice(null);
     const res = await api.updateSubmissionStatus(id, newStatus);
     if (res && res.success) {
       setSubmissions((prev) =>
         prev.map((sub) => (sub._id === id ? { ...sub, status: newStatus } : sub))
       );
+
+      // If approved, automatically add this question to the active Question Bank so students can practice it
+      if (newStatus === 'approved') {
+        const sub = submissions.find((s) => s._id === id);
+        if (sub) {
+          // Parse correct option index (e.g. "Option A: ..." -> 0)
+          let correctOption = 0;
+          if (typeof sub.correctAnswer === 'string') {
+            const match = sub.correctAnswer.match(/Option\s+([A-D])/i);
+            if (match) {
+              correctOption = match[1].toUpperCase().charCodeAt(0) - 65;
+            } else if (sub.options && sub.options.length > 0) {
+              const idx = sub.options.findIndex((opt) => opt.trim() === sub.correctAnswer.trim());
+              if (idx !== -1) correctOption = idx;
+            }
+          }
+
+          const inferredCategory = findCategoryForExam(sub.exam) || 'civil-services';
+
+          addQuestion({
+            id: `contrib-${sub._id || Date.now()}`,
+            category: inferredCategory,
+            exam: sub.exam,
+            subject: sub.subject,
+            topic: sub.topic || 'General',
+            question: sub.questionText,
+            options: sub.options || [],
+            correctOption: correctOption >= 0 && correctOption < (sub.options?.length || 4) ? correctOption : 0,
+            explanation: sub.explanation || `Contributed by verified educator ${sub.contributorName}.`,
+            difficulty: 'Medium',
+          });
+
+          setActionNotice({
+            type: 'success',
+            text: `Question approved! It has been published live to the "${sub.exam}" Question Bank.`,
+          });
+        }
+      } else if (newStatus === 'rejected') {
+        setActionNotice({
+          type: 'info',
+          text: 'Question has been marked as rejected and will not be published.',
+        });
+      }
     }
     setUpdatingId(null);
   };
@@ -77,6 +125,25 @@ export default function SubmissionsManager() {
           Refresh Submissions
         </button>
       </div>
+
+      {/* Action Notification Alert */}
+      {actionNotice && (
+        <div
+          className={`p-4 rounded-xl flex items-center justify-between text-xs font-semibold border transition-all ${
+            actionNotice.type === 'success'
+              ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+              : 'bg-blue-500/10 border-blue-500/30 text-blue-400'
+          }`}
+        >
+          <span>{actionNotice.text}</span>
+          <button
+            onClick={() => setActionNotice(null)}
+            className="text-slate-400 hover:text-white text-xs px-2 py-0.5"
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
