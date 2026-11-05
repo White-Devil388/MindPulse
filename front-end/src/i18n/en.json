@@ -43,8 +43,9 @@
     "f6_desc": "Upload your coaching or question PDF files and convert them into interactive tests instantly."
   },
   "stats": {
-    "title": "Numbers Speak Aloud",
-    "subtitle": "Empowering thousands of government aspirants every day with free quality preparation.",
+    "badge": "Real Impact & Growth",
+    "heading": "Numbers Speak Aloud",
+    "subheading": "Empowering thousands of government aspirants every day with free quality preparation.",
     "questions": "Questions Solved",
     "mockTests": "Mock Tests Completed",
     "aspirants": "Active Aspirants",
