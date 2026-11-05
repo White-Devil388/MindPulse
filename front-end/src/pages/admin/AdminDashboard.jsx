@@ -239,7 +239,7 @@ export default function AdminDashboard() {
           {activeTab === 'announcements' && <AnnouncementManager />}
           {activeTab === 'aspirants' && <AspirantManager />}
           {activeTab === 'submissions' && <SubmissionsManager />}
-          {activeTab === 'importer' && <JsonQuestionImporter />}
+          {(activeTab === 'importer' || activeTab === 'import-json') && <JsonQuestionImporter />}
         </main>
       </div>
     </div>
