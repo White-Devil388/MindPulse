@@ -20,6 +20,7 @@ import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
 import { EXAM_CATEGORIES } from '../utils/examData';
 import { COMPREHENSIVE_QUESTION_BANK } from '../utils/comprehensiveQuestions';
+import { getQuestionsForExam } from '../utils/questionFilter';
 import { usePagination } from '../hooks/usePagination';
 import api from '../services/api';
 
@@ -65,22 +66,7 @@ export default function ExamDetail() {
       allQuestions = COMPREHENSIVE_QUESTION_BANK;
     }
 
-    const cleanId = (examId || '').toLowerCase();
-    const cleanCat = (categoryId || '').toLowerCase();
-
-    let filtered = allQuestions.filter((q) => {
-      const qCat = (q.category || '').toLowerCase();
-      const qExam = (q.exam || '').toLowerCase().replace(/[^a-z0-9]+/g, '-');
-      const qExamRaw = (q.exam || '').toLowerCase();
-      return (
-        cleanId.includes(qExam) ||
-        cleanId.includes(qExamRaw) ||
-        qExam.includes(cleanId) ||
-        qCat === cleanCat
-      );
-    });
-
-    return filtered.length > 0 ? filtered : allQuestions;
+    return getQuestionsForExam(allQuestions, examId, categoryId);
   }, [examId, categoryId]);
 
   const totalBatches = useMemo(() => {

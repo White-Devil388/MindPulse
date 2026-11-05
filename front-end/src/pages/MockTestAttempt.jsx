@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { COMPREHENSIVE_QUESTION_BANK } from '../utils/comprehensiveQuestions';
+import { getQuestionsForExam } from '../utils/questionFilter';
 import { useTimer } from '../hooks/useTimer';
 import api from '../services/api';
 
@@ -48,24 +49,7 @@ export default function MockTestAttempt() {
       allQuestions = COMPREHENSIVE_QUESTION_BANK;
     }
 
-    const cleanId = (testId || '').toLowerCase();
-    let filtered = allQuestions.filter((q) => {
-      const qCat = (q.category || '').toLowerCase();
-      const qExam = (q.exam || '').toLowerCase().replace(/[^a-z0-9]+/g, '-');
-      const qExamRaw = (q.exam || '').toLowerCase();
-      return (
-        cleanId.includes(qCat) ||
-        cleanId.includes(qExam) ||
-        cleanId.includes(qExamRaw) ||
-        qExam.includes(cleanId)
-      );
-    });
-
-    if (filtered.length < 5) {
-      filtered = allQuestions;
-    }
-
-    return filtered;
+    return getQuestionsForExam(allQuestions, testId, null);
   }, [testId]);
 
   // Calculate total batches of 50 questions each
