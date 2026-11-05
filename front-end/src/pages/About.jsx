@@ -308,7 +308,7 @@ export default function About() {
                     value={formData.contributorName}
                     onChange={handleChange}
                     required
-                    placeholder="e.g. Rahul Sharma"
+                    placeholder="Enter your full name"
                     className="w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10 text-sm transition-all"
                   />
                 </div>
@@ -322,7 +322,7 @@ export default function About() {
                     value={formData.contributorEmail}
                     onChange={handleChange}
                     required
-                    placeholder="name@example.com"
+                    placeholder="Enter your email"
                     className="w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10 text-sm transition-all"
                   />
                 </div>
@@ -335,7 +335,7 @@ export default function About() {
                     name="contributorPhone"
                     value={formData.contributorPhone}
                     onChange={handleChange}
-                    placeholder="+91 98765 43210"
+                    placeholder="Enter mobile number"
                     className="w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10 text-sm transition-all"
                   />
                 </div>
@@ -353,7 +353,7 @@ export default function About() {
                     value={formData.exam}
                     onChange={handleChange}
                     required
-                    placeholder="e.g. UPSC CSE, SSC CGL, RRB NTPC"
+                    placeholder="e.g. UPSC, SSC CGL"
                     className="w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10 text-sm transition-all"
                   />
                 </div>
@@ -367,7 +367,7 @@ export default function About() {
                     value={formData.subject}
                     onChange={handleChange}
                     required
-                    placeholder="e.g. Indian Polity, Quantitative Aptitude"
+                    placeholder="e.g. History, Math"
                     className="w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10 text-sm transition-all"
                   />
                 </div>
@@ -380,7 +380,7 @@ export default function About() {
                     name="topic"
                     value={formData.topic}
                     onChange={handleChange}
-                    placeholder="e.g. Fundamental Rights, Time & Work"
+                    placeholder="e.g. Polity, Algebra"
                     className="w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10 text-sm transition-all"
                   />
                 </div>
@@ -397,7 +397,7 @@ export default function About() {
                   value={formData.questionText}
                   onChange={handleChange}
                   required
-                  placeholder="Type the full question clearly here..."
+                  placeholder="Enter your question here..."
                   className="w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10 text-sm transition-all"
                 ></textarea>
               </div>
@@ -414,7 +414,7 @@ export default function About() {
                     value={formData.optionA}
                     onChange={handleChange}
                     required
-                    placeholder="First option"
+                    placeholder="Option A"
                     className="w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10 text-sm transition-all"
                   />
                 </div>
@@ -428,7 +428,7 @@ export default function About() {
                     value={formData.optionB}
                     onChange={handleChange}
                     required
-                    placeholder="Second option"
+                    placeholder="Option B"
                     className="w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10 text-sm transition-all"
                   />
                 </div>
@@ -442,7 +442,7 @@ export default function About() {
                     value={formData.optionC}
                     onChange={handleChange}
                     required
-                    placeholder="Third option"
+                    placeholder="Option C"
                     className="w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10 text-sm transition-all"
                   />
                 </div>
@@ -456,7 +456,7 @@ export default function About() {
                     value={formData.optionD}
                     onChange={handleChange}
                     required
-                    placeholder="Fourth option"
+                    placeholder="Option D"
                     className="w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10 text-sm transition-all"
                   />
                 </div>
@@ -489,7 +489,7 @@ export default function About() {
                     name="explanation"
                     value={formData.explanation}
                     onChange={handleChange}
-                    placeholder="Why is this answer correct? Reference or formula..."
+                    placeholder="Enter answer explanation (optional)"
                     className="w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-500/10 text-sm transition-all"
                   />
                 </div>
