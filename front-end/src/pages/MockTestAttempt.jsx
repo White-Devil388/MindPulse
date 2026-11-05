@@ -458,18 +458,18 @@ export default function MockTestAttempt() {
           ) : null}
 
           {/* Question Palette */}
-          <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
+          <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm space-y-4">
             <h3 className="font-bold text-[#1E2A5A] text-sm">Question Palette ({questionsList.length} Qs)</h3>
-            <div className="grid grid-cols-5 gap-2 max-h-72 overflow-y-auto pr-1">
+            <div className="grid grid-cols-5 gap-2 max-h-80 overflow-y-auto p-1.5 -m-1.5">
               {questionsList.map((_, idx) => {
                 const isCurrent = currentIdx === idx;
                 const isAnswered = selectedAnswers[idx] !== undefined;
                 const isMarked = markedForReview[idx];
 
-                let btnClass = 'bg-slate-100 text-slate-700 border-slate-200';
-                if (isAnswered) btnClass = 'bg-emerald-600 text-white border-emerald-700';
-                if (isMarked) btnClass = 'bg-amber-500 text-white border-amber-600';
-                if (isCurrent) btnClass += ' ring-2 ring-blue-500 ring-offset-2';
+                let btnClass = 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200';
+                if (isAnswered) btnClass = 'bg-emerald-600 text-white border-emerald-700 hover:bg-emerald-700';
+                if (isMarked) btnClass = 'bg-amber-500 text-white border-amber-600 hover:bg-amber-600';
+                if (isCurrent) btnClass += ' ring-2 ring-blue-500 ring-offset-1 z-10';
 
                 return (
                   <button
