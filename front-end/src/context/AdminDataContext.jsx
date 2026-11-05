@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { EXAM_CATEGORIES } from '../utils/examData';
 import { COMPREHENSIVE_QUESTION_BANK } from '../utils/comprehensiveQuestions';
+import { deduplicateQuestions, normalizeStr } from '../utils/questionFilter';
 
 const AdminDataContext = createContext(null);
 
@@ -130,22 +131,25 @@ export const AdminDataProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : INITIAL_MOCK_TESTS;
   });
 
-  // Question bank state
+  // Question bank state (strictly deduplicated on load so repeating questions never persist)
   const [questions, setQuestions] = useState(() => {
     const saved = localStorage.getItem('mindpulse_admin_questions');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length >= 1000) {
-          return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const cleaned = deduplicateQuestions(parsed);
+          localStorage.setItem('mindpulse_admin_questions', JSON.stringify(cleaned));
+          return cleaned;
         }
       } catch (e) {
         console.error(e);
       }
     }
-    // Default to the full 2,200 non-repeating comprehensive bank
-    localStorage.setItem('mindpulse_admin_questions', JSON.stringify(COMPREHENSIVE_QUESTION_BANK));
-    return COMPREHENSIVE_QUESTION_BANK;
+    // Default to the deduplicated comprehensive bank
+    const uniqueBank = deduplicateQuestions(COMPREHENSIVE_QUESTION_BANK);
+    localStorage.setItem('mindpulse_admin_questions', JSON.stringify(uniqueBank));
+    return uniqueBank;
   });
 
   // Announcements / Notice banner state
@@ -215,8 +219,13 @@ export const AdminDataProvider = ({ children }) => {
     );
   };
 
-  // CRUD actions for Questions
+  // CRUD actions for Questions (with duplicate prevention)
   const addQuestion = (q) => {
+    if (!q || !q.question) return;
+    const normKey = normalizeStr(q.question);
+    const isDuplicate = questions.some((existing) => normalizeStr(existing.question) === normKey);
+    if (isDuplicate) return;
+
     const newQ = {
       ...q,
       id: `q-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
@@ -224,13 +233,17 @@ export const AdminDataProvider = ({ children }) => {
     setQuestions((prev) => [newQ, ...prev]);
   };
 
-  // Bulk Import Questions from JSON (single object or array of objects)
+  // Bulk Import Questions from JSON with strict duplicate checking
   const importQuestionsBulk = (newQuestionsArray) => {
     if (!Array.isArray(newQuestionsArray)) {
       return { success: false, message: 'JSON must be an array of question objects.' };
     }
 
+    // Build lookup set of all existing question strings
+    const existingSet = new Set(questions.map((q) => normalizeStr(q.question)));
     const validated = [];
+    let duplicatesSkipped = 0;
+
     for (let i = 0; i < newQuestionsArray.length; i++) {
       const item = newQuestionsArray[i];
       if (!item.question || !Array.isArray(item.options) || item.options.length < 2) {
@@ -240,21 +253,42 @@ export const AdminDataProvider = ({ children }) => {
         };
       }
 
+      const normQ = normalizeStr(item.question);
+      // Skip if question already exists in bank or was already seen in this JSON batch
+      if (existingSet.has(normQ)) {
+        duplicatesSkipped++;
+        continue;
+      }
+      existingSet.add(normQ);
+
       validated.push({
         id: item.id || `q-${Date.now()}-${i}-${Math.random().toString(36).substring(2, 7)}`,
         category: item.category || 'general',
         exam: item.exam || 'All Exams',
         subject: item.subject || 'General Studies',
-        question: String(item.question),
-        options: item.options.map(String),
+        question: String(item.question).trim(),
+        options: item.options.map((o) => String(o).trim()),
         correctOption: typeof item.correctOption === 'number' ? item.correctOption : 0,
         explanation: item.explanation || 'Answer verified by question bank.',
         difficulty: item.difficulty || 'Medium',
       });
     }
 
+    if (validated.length === 0) {
+      return {
+        success: false,
+        message: `All ${newQuestionsArray.length} question(s) in this file already exist in the Question Bank (duplicate questions skipped).`,
+        count: 0,
+        duplicatesSkipped,
+      };
+    }
+
     setQuestions((prev) => [...validated, ...prev]);
-    return { success: true, count: validated.length };
+    return {
+      success: true,
+      count: validated.length,
+      duplicatesSkipped,
+    };
   };
 
   const deleteQuestion = (id) => {

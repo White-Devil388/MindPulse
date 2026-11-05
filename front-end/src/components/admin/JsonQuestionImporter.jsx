@@ -97,7 +97,8 @@ export default function JsonQuestionImporter() {
 
       const res = importQuestionsBulk(questionsArray);
       if (res.success) {
-        setSuccessMsg(`🎉 Successfully imported ${res.count} question(s) into the Question Bank!`);
+        const skipText = res.duplicatesSkipped > 0 ? ` (${res.duplicatesSkipped} duplicate questions were automatically skipped)` : '';
+        setSuccessMsg(`🎉 Successfully imported ${res.count} unique question(s) into the Question Bank!${skipText}`);
         setJsonText('');
       } else {
         setError(res.message);

@@ -5,6 +5,22 @@ import { EXAM_CATEGORIES } from './examData.js';
 export const normalizeStr = (s) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
 /**
+ * Deduplicates an array of questions based on normalized question text and options.
+ * Ensures identical questions are never repeated anywhere.
+ */
+export function deduplicateQuestions(list) {
+  if (!Array.isArray(list)) return [];
+  const seen = new Set();
+  return list.filter((q) => {
+    if (!q || !q.question) return false;
+    const key = normalizeStr(q.question);
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+/**
  * Deterministically shuffles an array based on a string seed (e.g., examId).
  * Ensures tests for different exams without explicit questions get different ordering,
  * but the same exam always produces the exact same repeatable test order.
@@ -59,7 +75,7 @@ export function findCategoryForExam(examOrTestId) {
  *    using the examId so different exams NEVER show identical questions.
  */
 export function getQuestionsForExam(allQuestions, rawExamId, rawCatId) {
-  const source = (allQuestions && allQuestions.length > 0) ? allQuestions : COMPREHENSIVE_QUESTION_BANK;
+  const source = deduplicateQuestions((allQuestions && allQuestions.length > 0) ? allQuestions : COMPREHENSIVE_QUESTION_BANK);
   const cleanExam = normalizeStr(rawExamId);
   const inferredCat = rawCatId || findCategoryForExam(rawExamId);
   const cleanCat = normalizeStr(inferredCat);
